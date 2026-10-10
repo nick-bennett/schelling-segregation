@@ -68,7 +68,6 @@ class SchellingModelBase(ABC):
         raise ValueError("grid rows must all have the same length")
       if any(type(cell) is not int or cell not in valid_states for cell in row):
         raise ValueError("grid cells must be EMPTY, GROUP_A, or GROUP_B")
-
     model = cls(width=width, height=len(grid), tolerance=tolerance, rng=rng)
     model._grid = [row.copy() for row in grid]
     return model
@@ -113,26 +112,20 @@ class SchellingModelBase(ABC):
   def step(self) -> int:
     """
     Execute one complete simulation step:
-    1. Identify all discontented agents, according to the current tolerance.
+    1. Identify all the locations of all discontented agents, according to the
+       current tolerance.
     2. Identify all empty cell locations.
-    3. If there are discontented agents and empty cell locations:
-        a. Shuffle the discontented agents.
-        b. For each discontented agent in turn, in shuffled order:
+    3. If there are any discontented agent locations and any empty cell locations:
+        a. Shuffle the discontented agent locations.
+        b. For each discontented agent location in turn, in shuffled order:
             i. Select a destination at random from the empty cell locations --
                without regard to whether the destination would be satisfactory
                to the agent.
-           ii. Relocate the discontented agent to the destination.
-          iii. Mark the destination unavailable for further relocations in this
-               step, and update the cell content to GROUP_A or GROUP_B,
-               according to the relocated agent.
-           iv. Make the vacated location available for further relocations in
-               this step, updating the cell content to EMPTY. (This deviates
-               from some versions of Schelling's segregation model, in which
-               newly vacated spaces are not available as destinations in the same
-               step.)
-
-    Use steps 3.b.iii–iv to preserve the invariant condition that the total
-    counts of GROUP_A, GROUP_B, and EMPTY cells remain constant.
+           ii. Swap the cell states of the discontented agent location and the
+               destination location. Effectively, this moves the discontented
+               agent to the destination, and makes the agent's previous location
+               empty. This preserves the invariant condition that the total
+               counts of GROUP_A, GROUP_B, and EMPTY cells remain constant.
 
     :return: Number of agents that were relocated during this step, or -1 if
              there are discontented agents, but no empty cell locations.
