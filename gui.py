@@ -20,6 +20,7 @@ COLOR_MAP = {
 GRID_SIZE = 40
 CELL_PX = 12
 INITIAL_DENSITY = 0.85
+INITIAL_TOLERANCE = 0.35
 
 
 class SchellingGUI:
@@ -27,10 +28,19 @@ class SchellingGUI:
     self.root = root
     self.root.title("Schelling Segregation Explorer")
     self.running = False
+
+    self.density_var = tk.DoubleVar(value=INITIAL_DENSITY)
+    self.tolerance_var = tk.DoubleVar(value=INITIAL_TOLERANCE)
+    self.density_text = tk.StringVar()
+    self.tolerance_text = tk.StringVar()
+    self.density_var.trace_add("write", self._update_control_values)
+    self.tolerance_var.trace_add("write", self._update_control_values)
+    self._update_control_values()
+
     self.model = SchellingModel(
         width=GRID_SIZE,
         height=GRID_SIZE,
-        tolerance=0.35
+        tolerance=INITIAL_TOLERANCE
     )
     self.model.repopulate(INITIAL_DENSITY)
 
@@ -42,14 +52,24 @@ class SchellingGUI:
     control_panel.pack(side=tk.LEFT, fill=tk.Y)
 
     # Sliders
-    ttk.Label(control_panel, text="Population Density").pack(anchor=tk.W)
+    density_header = ttk.Frame(control_panel)
+    density_header.pack(fill=tk.X)
+    ttk.Label(density_header, text="Population Density").pack(side=tk.LEFT)
+    ttk.Label(density_header, textvariable=self.density_text).pack(side=tk.RIGHT)
     self.density_slider = ttk.Scale(
-        control_panel, from_=0.1, to=0.98, value=INITIAL_DENSITY
+        control_panel, from_=0.1, to=0.98, variable=self.density_var
     )
     self.density_slider.pack(fill=tk.X, pady=(0, 10))
 
-    ttk.Label(control_panel, text="Tolerance Threshold (T)").pack(anchor=tk.W)
-    self.tolerance_slider = ttk.Scale(control_panel, from_=0.0, to=1.0, value=0.35)
+    tolerance_header = ttk.Frame(control_panel)
+    tolerance_header.pack(fill=tk.X)
+    ttk.Label(tolerance_header, text="Tolerance Threshold (T)").pack(side=tk.LEFT)
+    ttk.Label(
+        tolerance_header, textvariable=self.tolerance_text
+    ).pack(side=tk.RIGHT)
+    self.tolerance_slider = ttk.Scale(
+        control_panel, from_=0.0, to=1.0, variable=self.tolerance_var
+    )
     self.tolerance_slider.pack(fill=tk.X, pady=(0, 10))
 
     # Status Labels
@@ -67,6 +87,10 @@ class SchellingGUI:
     self.canvas = tk.Canvas(self.root, width=canvas_px, height=canvas_px, bg="white")
     self.canvas.pack(side=tk.RIGHT, padx=10, pady=10)
 
+  def _update_control_values(self, *_):
+    self.density_text.set(f"{self.density_var.get():.2f}")
+    self.tolerance_text.set(f"{self.tolerance_var.get():.2f}")
+
   def draw_grid(self):
     self.canvas.delete("all")
     grid = self.model.get_grid()
@@ -83,12 +107,12 @@ class SchellingGUI:
   def handle_reset(self):
     self.running = False
     self.run_btn.config(text="Run Simulation")
-    self.model.repopulate(float(self.density_slider.get()))
-    self.model.tolerance = float(self.tolerance_slider.get())
+    self.model.repopulate(self.density_var.get())
+    self.model.tolerance = self.tolerance_var.get()
     self.draw_grid()
 
   def handle_step(self):
-    self.model.tolerance = float(self.tolerance_slider.get())
+    self.model.tolerance = self.tolerance_var.get()
     moves = self.model.step()
     self.draw_grid()
     sat = self.model.get_satisfaction_rate() * 100
