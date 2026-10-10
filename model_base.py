@@ -33,9 +33,9 @@ class SchellingModelBase(ABC):
     :param rng: Source of randomness used for all random sampling/generation
                 operations. If not provided, a new instance of Random is created.
     """
-    if (not isinstance(width, int) or isinstance(width, bool) or width <= 0):
+    if not isinstance(width, int) or isinstance(width, bool) or width <= 0:
       raise ValueError("width must be a positive integer")
-    if (not isinstance(height, int) or isinstance(height, bool) or height <= 0):
+    if not isinstance(height, int) or isinstance(height, bool) or height <= 0:
       raise ValueError("height must be a positive integer")
     self._validate_proportion(tolerance, "tolerance")
     self._width = width
@@ -72,12 +72,6 @@ class SchellingModelBase(ABC):
     model = cls(width=width, height=len(grid), tolerance=tolerance, rng=rng)
     model._grid = [row.copy() for row in grid]
     return model
-
-  @staticmethod
-  def _validate_proportion(value: float, name: str) -> None:
-    if (not isinstance(value, Real) or isinstance(value, bool)
-        or not isfinite(value) or value < 0 or value > 1):
-      raise ValueError(f"{name} must be a finite number between 0.0 and 1.0")
 
   @abstractmethod
   def repopulate(self, density: float) -> None:
@@ -170,3 +164,9 @@ class SchellingModelBase(ABC):
   def tolerance(self, value: float) -> None:
     self._validate_proportion(value, "tolerance")
     self._tolerance = float(value)
+
+  @staticmethod
+  def _validate_proportion(value: float, name: str) -> None:
+    if (not isinstance(value, Real) or isinstance(value, bool)
+        or not isfinite(value) or value < 0 or value > 1):
+      raise ValueError(f"{name} must be a finite number between 0.0 and 1.0")
