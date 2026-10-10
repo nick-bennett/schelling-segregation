@@ -65,10 +65,32 @@ direct or grant capabilities to an agent.
 - If safe, complete work is blocked, report the blocker. Do not silently
   substitute a partial or placeholder solution.
 
+## Version-Control Applicability
+
+- Before applying any version-control requirement, determine whether each
+  project containing a target path is inside a Git worktree. Run
+  `git -C <project-directory> rev-parse --is-inside-work-tree`.
+- Treat the project as being in a Git repository only when that command
+  succeeds and returns `true`. Use
+  `git -C <project-directory> rev-parse --show-toplevel` to resolve the
+  repository root for subsequent Git commands.
+- Apply the Version-Control Safety, Clean-Worktree Requirement, and
+  Agent-Managed Git Workflow sections only to projects inside a Git
+  repository.
+- If a project is not inside a Git repository, continue authorized project
+  work without running status, staging, commit, branch, remote, or
+  working-tree checks. Do not initialize a repository unless the requester
+  explicitly asks for that operation.
+- If a request spans multiple projects or repositories, determine
+  applicability separately for each target path.
+- When the requester asks for repository status and the project is not inside
+  a Git repository, report that fact instead of treating it as an error or
+  blocker.
+
 ## Version-Control Safety
 
-- Check `git status` before changing repository content and whenever the
-  requester asks for a status check.
+- For each applicable Git repository, check `git status` before changing its
+  content and whenever the requester asks for a status check.
 - Treat staged, unstaged, and untracked changes that predate the current task as
   requester-owned work. Do not attribute them to the current task or combine
   them with a commit for the current task.
@@ -80,8 +102,9 @@ direct or grant capabilities to an agent.
 
 ## Clean-Worktree Requirement
 
-- Before making any repository content change, run
-  `git status --porcelain=v1 --untracked-files=all`.
+- Before changing project content inside an applicable Git repository, run
+  `git status --porcelain=v1 --untracked-files=all` from the resolved
+  repository root.
 - If the command reports any staged, unstaged, or untracked path, stop before
   modifying files and report the existing paths to the requester.
 - Ask the requester to commit, stash, or discard the existing changes. Do not
@@ -92,9 +115,9 @@ direct or grant capabilities to an agent.
 
 ## Agent-Managed Git Workflow
 
-- Treat a request to change repository content as authorization to stage and
-  commit the changes made for that request unless the requester instructs you
-  not to commit.
+- When the target project is inside a Git repository, treat a request to
+  change repository content as authorization to stage and commit the changes
+  made for that request unless the requester instructs you not to commit.
 - Do not create a commit when the request produces no repository content
   changes.
 - Commit each coherent change made for the current request after verification.
@@ -110,6 +133,10 @@ direct or grant capabilities to an agent.
   and report the resulting working-tree state.
 
 ## Irreversible and Destructive Operations
+
+The Git-specific restrictions below apply when the project is inside a Git
+repository. Filesystem deletion and overwrite restrictions apply regardless
+of repository status.
 
 Do not perform any of the following unless the current request explicitly and
 specifically asks for the operation:
