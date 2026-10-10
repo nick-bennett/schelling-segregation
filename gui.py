@@ -26,14 +26,13 @@ class SchellingGUI:
     self.root = root
     self.root.title("Schelling Segregation Explorer")
     self.running = False
-
+    initial_density = 0.85
     self.model = SchellingModel(
         width=GRID_SIZE,
         height=GRID_SIZE,
-        density=0.85,
         tolerance=0.35
     )
-    self.model.reset()
+    self.model.repopulate(initial_density)
 
     self._build_widgets()
     self.draw_grid()
@@ -69,9 +68,8 @@ class SchellingGUI:
   def draw_grid(self):
     self.canvas.delete("all")
     grid = self.model.get_grid()
-    for r in range(GRID_SIZE):
-      for c in range(GRID_SIZE):
-        val = grid[r][c]
+    for r, row in enumerate(grid):
+      for c, val in enumerate(row):
         color = COLOR_MAP.get(val, "#000000")
         x0, y0 = c * CELL_PX, r * CELL_PX
         x1, y1 = x0 + CELL_PX, y0 + CELL_PX
@@ -83,9 +81,8 @@ class SchellingGUI:
   def handle_reset(self):
     self.running = False
     self.run_btn.config(text="Run Simulation")
-    self.model.density = float(self.density_slider.get())
+    self.model.repopulate(float(self.density_slider.get()))
     self.model.tolerance = float(self.tolerance_slider.get())
-    self.model.reset()
     self.draw_grid()
 
   def handle_step(self):
@@ -106,7 +103,7 @@ class SchellingGUI:
     if not self.running:
       return
     moves = self.handle_step()
-    if moves == 0:
+    if moves <= 0:
       self.running = False
       self.run_btn.config(text="Run Simulation")
       return

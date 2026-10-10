@@ -2,6 +2,7 @@
 test_engine.py
 Deterministic unit checks to verify model implementation before attaching to UI.
 """
+from random import Random
 
 # Import the student concrete class
 from model_impl import SchellingModel
@@ -10,7 +11,7 @@ from model_base import EMPTY, GROUP_A, GROUP_B
 
 
 def test_zero_neighbor_satisfaction():
-  model = SchellingModel(width=3, height=3, density=0.1, tolerance=0.5)
+  model = SchellingModel(width=3, height=3, tolerance=0.5, rng = Random(0))
   # Clear grid
   model.grid = [[EMPTY] * 3 for _ in range(3)]
   # Place a single agent in the center
@@ -45,8 +46,8 @@ def test_satisfaction_threshold_logic():
 
 
 def test_relocation_count():
-  model = SchellingModel(width=3, height=3, density=0.5, tolerance=0.8)
-  model.reset()
+  model = SchellingModel(width=3, height=3, tolerance=0.8)
+  model.repopulate(0.5)
   moves = model.step()
   assert isinstance(moves, int), "step() must return an integer move count."
   print("✓ Step relocation return type passed.")
