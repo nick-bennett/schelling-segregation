@@ -1,14 +1,14 @@
 """
-test_engine.py
+test_schelling_model.py
 Deterministic unit checks to verify model implementation before attaching to UI.
 """
 from collections import Counter
 from random import Random
 
 # Import the student concrete class
-from model_impl import SchellingModel
+from schelling_model import SchellingModel
 
-from model_base import EMPTY, GROUP_A, GROUP_B
+from schelling_model_base import EMPTY, GROUP_A, GROUP_B
 
 
 def assert_raises(exception_type, callable_, *args, **kwargs):

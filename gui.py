@@ -1,15 +1,15 @@
 """
 gui.py
 Pre-built Tkinter visualization harness.
-Expects `model_impl.py` with `SchellingModel` in the same directory.
+Expects `schelling_model.py` with `SchellingModel` in the same directory.
 """
 
 import tkinter as tk
 from tkinter import ttk
 
-from model_impl import SchellingModel
+from schelling_model import SchellingModel
 
-from model_base import EMPTY, GROUP_A, GROUP_B
+from schelling_model_base import EMPTY, GROUP_A, GROUP_B
 
 COLOR_MAP = {
   EMPTY: "#FFFFFF",

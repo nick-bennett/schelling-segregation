@@ -1,5 +1,5 @@
 """
-model_base.py
+schelling_model_base.py
 Abstract base class contract for the Schelling Segregation Model.
 """
 

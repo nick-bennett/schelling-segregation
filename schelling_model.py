@@ -1,11 +1,11 @@
 """
-model_impl.py
+schelling_model.py
 Concrete implementation scaffold for the Schelling Segregation Model.
 """
 
 from typing import List
 
-from model_base import SchellingModelBase
+from schelling_model_base import SchellingModelBase
 
 
 class SchellingModel(SchellingModelBase):
