@@ -8,7 +8,6 @@ import tkinter as tk
 from tkinter import ttk
 
 from schelling_model import SchellingModel
-
 from schelling_model_base import EMPTY, GROUP_A, GROUP_B
 
 COLOR_MAP = {

@@ -7,7 +7,6 @@ from random import Random
 
 # Import the student concrete class
 from schelling_model import SchellingModel
-
 from schelling_model_base import EMPTY, GROUP_A, GROUP_B
 
 
