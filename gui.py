@@ -19,6 +19,7 @@ COLOR_MAP = {
 
 GRID_SIZE = 40
 CELL_PX = 12
+INITIAL_DENSITY = 0.85
 
 
 class SchellingGUI:
@@ -26,13 +27,12 @@ class SchellingGUI:
     self.root = root
     self.root.title("Schelling Segregation Explorer")
     self.running = False
-    initial_density = 0.85
     self.model = SchellingModel(
         width=GRID_SIZE,
         height=GRID_SIZE,
         tolerance=0.35
     )
-    self.model.repopulate(initial_density)
+    self.model.repopulate(INITIAL_DENSITY)
 
     self._build_widgets()
     self.draw_grid()
@@ -43,7 +43,9 @@ class SchellingGUI:
 
     # Sliders
     ttk.Label(control_panel, text="Population Density").pack(anchor=tk.W)
-    self.density_slider = ttk.Scale(control_panel, from_=0.1, to=0.98, value=0.85)
+    self.density_slider = ttk.Scale(
+        control_panel, from_=0.1, to=0.98, value=INITIAL_DENSITY
+    )
     self.density_slider.pack(fill=tk.X, pady=(0, 10))
 
     ttk.Label(control_panel, text="Tolerance Threshold (T)").pack(anchor=tk.W)
@@ -90,7 +92,10 @@ class SchellingGUI:
     moves = self.model.step()
     self.draw_grid()
     sat = self.model.get_satisfaction_rate() * 100
-    self.status_var.set(f"Satisfaction: {sat:.1f}% | Last Moves: {moves}")
+    if moves == -1:
+      self.status_var.set(f"Satisfaction: {sat:.1f}% | Blocked: no empty cells")
+    else:
+      self.status_var.set(f"Satisfaction: {sat:.1f}% | Last Moves: {moves}")
     return moves
 
   def toggle_run(self):
