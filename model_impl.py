@@ -8,7 +8,7 @@ from typing import List
 from model_base import SchellingModelBase
 
 
-class SchellingMOdel(SchellingModelBase):
+class SchellingModel(SchellingModelBase):
   """
   Concrete Schelling model implementation scaffold.
   """
@@ -27,6 +27,3 @@ class SchellingMOdel(SchellingModelBase):
 
   def get_satisfaction_rate(self) -> float:
     raise NotImplementedError
-
-
-SchellingModel = SchellingMOdel
