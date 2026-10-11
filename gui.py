@@ -8,7 +8,6 @@ import tkinter as tk
 from tkinter import ttk
 
 from schelling_model import SchellingModel
-
 from schelling_model_base import EMPTY, GROUP_A, GROUP_B
 
 COLOR_MAP = {
@@ -42,7 +41,7 @@ class SchellingGUI:
         height=GRID_SIZE,
         tolerance=INITIAL_TOLERANCE
     )
-    self.model.repopulate(INITIAL_DENSITY)
+    self.model.populate(INITIAL_DENSITY)
 
     self._build_widgets()
     self.draw_grid()
@@ -107,7 +106,7 @@ class SchellingGUI:
   def handle_reset(self):
     self.running = False
     self.run_btn.config(text="Run Simulation")
-    self.model.repopulate(self.density_var.get())
+    self.model.populate(self.density_var.get())
     self.model.tolerance = self.tolerance_var.get()
     self.draw_grid()
 

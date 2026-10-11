@@ -1,13 +1,12 @@
 """
 test_schelling_model.py
-Deterministic unit checks to verify model implementation before attaching to UI.
+Unit tests to verify model implementation before attaching to UI.
 """
 from collections import Counter
 from random import Random
 
 # Import the student concrete class
 from schelling_model import SchellingModel
-
 from schelling_model_base import EMPTY, GROUP_A, GROUP_B
 
 
@@ -205,30 +204,30 @@ def test_constructor_and_tolerance_validation():
   print("✓ Constructor and tolerance validation passed.")
 
 
-def test_repopulate_validation_and_endpoints():
+def test_populate_validation_and_endpoints():
   model = SchellingModel(width=3, height=2, tolerance=0.5, rng=Random(0))
 
   for invalid_density in (-0.01, 1.01, float("nan"), float("inf"), True):
-    assert_raises(ValueError, model.repopulate, invalid_density)
+    assert_raises(ValueError, model.populate, invalid_density)
 
-  model.repopulate(0.0)
+  model.populate(0.0)
   assert all(cell == EMPTY for row in model.get_grid() for cell in row)
-  model.repopulate(1.0)
+  model.populate(1.0)
   assert all(cell != EMPTY for row in model.get_grid() for cell in row)
-  print("✓ Repopulation validation and endpoints passed.")
+  print("✓ Population validation and endpoints passed.")
 
 
-def test_seeded_repopulation_is_reproducible():
+def test_seeded_population_is_reproducible():
   first = SchellingModel(width=4, height=4, tolerance=0.5, rng=Random(7))
   second = SchellingModel(width=4, height=4, tolerance=0.5, rng=Random(7))
 
-  first.repopulate(0.5)
-  second.repopulate(0.5)
+  first.populate(0.5)
+  second.populate(0.5)
 
   assert first.get_grid() == second.get_grid(), (
     "Models using identically seeded random generators must repopulate identically."
   )
-  print("✓ Seeded repopulation reproducibility passed.")
+  print("✓ Seeded population reproducibility passed.")
 
 
 def test_grid_copies_are_safe():
@@ -278,8 +277,8 @@ if __name__ == "__main__":
   test_seeded_steps_are_reproducible()
   test_initial_grid_is_empty()
   test_constructor_and_tolerance_validation()
-  test_repopulate_validation_and_endpoints()
-  test_seeded_repopulation_is_reproducible()
+  test_populate_validation_and_endpoints()
+  test_seeded_population_is_reproducible()
   test_grid_copies_are_safe()
   test_from_grid_validation()
   print("\nAll verification tests passed successfully!")
