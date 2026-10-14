@@ -36,6 +36,13 @@ This project contains the source files for a simple exercise in the use of LLMs&
 
     This file includes a definition of the `SchellingGUI` class, which manages a simple user interface to control the simulation of the segregation model. The correct operation of this class depends on an implementation of `SchellingModel` that conforms to the contract specified in `SchellingModelBase`. Given this, the learner may wish to direct a coding agent to examine this file as part of examining the contract; however, we strongly recommend that the agent not be permitted to make changes to this file.
 
+     This file also includes an execution entry point: To display the GUI, and use it to control the simulation, run this file, e.g.:
+
+    ```bash
+    python gui.py
+    ```
+
+
 See ["Prompts"](prompts.md) for some suggested prompts for use with a coding agent or (with the necessary context provided through upload or copy & paste) a web-facing interface to an LLM model. 
 
 ## Credits, copyrights, and license information
