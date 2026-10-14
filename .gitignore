@@ -104,10 +104,6 @@ versions.properties
 
 db/
 
-# TODO Add data directory to this in JDBC/JPA/Spring Data projects with embedded databases!
-# TODO Add database log files located outside the data directory in JDBC/JPA/Spring Data projects!
-
-
 ### macOS ###
 
 .DS_Store
