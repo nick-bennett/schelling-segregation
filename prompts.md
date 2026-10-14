@@ -10,7 +10,7 @@
 
 > Act as a senior software architect and domain modeler. Read this abstract base class and docstrings for a Schelling Segregation simulation (`schelling_model_base.py`). Identify unhandled edge cases, potential division-by-zero risks, boundary condition problems, and logical ambiguities in the specification before we write code.
 
-## ??
+## Preparation for verification
 
 ### Context
 
