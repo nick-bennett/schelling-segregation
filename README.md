@@ -8,7 +8,7 @@ This project contains the source files for a simple exercise in the use of LLMs&
 
 - `schelling_model_base.py`
 
-    This is an _abstract base class_ (_ABC_) defining the behavioral contract for an implementation of Schelling's model of segregation. In this context, "contract" should be assumed to mean: "A definition of an abstract object type (`SchellingModelBase`, in this case), with declarations spelling out the return types and parameter types and names of each method (including some decorated with `@abstractmethod`), and with docstrings describing the responsibility and behavior of each."
+    This is an _abstract base class_ (_ABC_) defining the behavioral contract for an implementation of Schelling's model of segregation. In this context, "contract" should be assumed to mean: "A definition of an abstract object type (`SchellingModelBase`, in this case), with declarations spelling out the return type and parameter types and names of each method (including some decorated with `@abstractmethod`), and with docstrings describing the responsibility and behavior of each."
 
     This abstract class is intended as the primary artifact around which a conversation with an AI coding agent (or web-based LLM interface) will take place. We suggest that the learner, through a series of one or more prompt-response interactions (see ["Prompts](prompts.md) for some suggestions), resolves any ambiguity or inconsistency that the agent notes in the contract, before proceeding to generate any additional code.
 
